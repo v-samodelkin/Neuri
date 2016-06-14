@@ -46,7 +46,7 @@ namespace NeuroS
 
         public static Line operator -(Line m1, Line m2)
         {
-            if (m1.Width != m2.Height)
+            if (m1.Width != m2.Width)
                 throw new ArgumentException("Разная длина векторов");
 
             var ans = new Line(m1.Width);
@@ -55,6 +55,14 @@ namespace NeuroS
                 ans[k] = m1[k] - m2[k];
 
             return ans;
+        }
+
+        public Line Select(Func<double, double> func)
+        {
+            for (int i = 0; i < Width; i++)
+                for (int j = 0; j < Height; j++)
+                    data[i, j] = func(data[i, j]);
+            return this;
         }
 
         public double this[int x]

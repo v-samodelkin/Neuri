@@ -17,15 +17,15 @@ namespace NeuroS
         public SigmoidNetwork(IEnumerable<int> layersSizes)
         {
             LayersSizes = layersSizes.ToArray();
-            LayersCount = LayersSizes.Count();
+            LayersCount = LayersSizes.Count() - 1;
 
-            ConnectionWeights = new Matrix[LayersCount - 1];
-            for (int i = 0; i < LayersCount - 1; i++)
+            ConnectionWeights = new Matrix[LayersCount];
+            for (int i = 0; i < LayersCount; i++)
                 ConnectionWeights[i] = new Matrix(LayersSizes[i + 1], LayersSizes[i]);
 
-            Bioses = new Line[LayersCount - 1];
-            for (int i = 0; i < LayersCount - 1; i++)
-                Bioses[i] = new Line(LayersSizes[i]);
+            Bioses = new Line[LayersCount];
+            for (int i = 0; i < LayersCount; i++)
+                Bioses[i] = new Line(LayersSizes[i + 1]);
 
         }
 
@@ -88,7 +88,7 @@ namespace NeuroS
             if (input.Width != LayersSizes[layerId])
                 throw new ArgumentOutOfRangeException(String.Format("Неверный вектор подан на слой {0}. Ожидается длина {1}, а пришло {2}.", layerId, LayersSizes[layerId], input.Width));
             var ans = input * ConnectionWeights[layerId];
-            return ans.AsLine() - Bioses[layerId];
+            return (ans.AsLine() - Bioses[layerId]).Select(x => Sigmoid(x));
         }
 
         public Line Ask(Line input)
@@ -96,7 +96,10 @@ namespace NeuroS
             if (input.Width != LayersSizes[0])
                 throw new ArgumentOutOfRangeException("Длина входного вектора не равна количеству нейронов на первом слое");
 
-            return new Line(new double[4]);
+            for (int i = 0; i < LayersCount; i++)
+                input = NextLayer(i, input);
+
+            return input;
         }
     }
 }

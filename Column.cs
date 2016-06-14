@@ -43,6 +43,14 @@ namespace NeuroS
             else
                 throw new ArgumentException("Это настоящий двумерный массив, он не столбик");
         }
+
+        public Column Select(Func<double, double> func)
+        {
+            for (int i = 0; i < Width; i++)
+                for (int j = 0; j < Height; j++)
+                    data[i, j] = func(data[i, j]);
+            return this;
+        }
         public double this[int y]
         {
             get

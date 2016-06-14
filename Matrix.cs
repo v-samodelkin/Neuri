@@ -91,6 +91,14 @@ namespace NeuroS
             return new Line(data);
         }
 
+        public Matrix Select(Func<double, double> func)
+        {
+            for (int i = 0; i < Width; i++)
+                for (int j = 0; j < Height; j++)
+                    data[i, j] = func(data[i, j]);
+            return this;
+        }
+
         public Column AsColumn()
         {
             return new Column(data);
