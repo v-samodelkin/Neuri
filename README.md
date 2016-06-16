@@ -8,7 +8,7 @@
   Sample.cs
   
 # Краткий пример использования
-            var network = new SigmoidNetwork(new List<int> { 20, 150, 1 }) // Создаём сесть с 20 входами, 1 выходом и скрытым слоем в 150 нейронов
-                .Randomize(); // Инициализируем случайными весами
-            network.Learning(eta, epochs, questions, answers); // Обучаем
-            var ans = network.Ask(question); // Спрашиваем
+            var network = new SigmoidNetwork(new List<int> { 20, 150, 1 }) // Один скрытый слой в 150 нейронов
+                .Randomize();
+            network.Learning(eta, epochs, questions, answers);
+            var ans = network.Ask(question);
